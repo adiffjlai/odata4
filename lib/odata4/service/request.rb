@@ -8,6 +8,8 @@ module OData4
       attr_reader :query
       # The HTTP method for this request
       attr_accessor :method
+      # The request body (optional)
+      attr_accessor :body
       # The request format (`:atom`, `:json`, or `:auto`)
       attr_accessor :format
 
@@ -18,9 +20,10 @@ module OData4
       def initialize(service, url_chunk, options = {})
         @service = service
         @url_chunk = url_chunk
-        @method = options[:method] || :get
-        @format = options[:format] || :auto
+        @method = options[:method]  || :get
+        @format = options[:format]  || :auto
         @query  = options[:query]
+        @body   = options[:body]    || nil
       end
 
       # Return the full request URL (including service base)
@@ -47,7 +50,11 @@ module OData4
       # @return [OData4::Service::Response]
       def execute(additional_options = {})
         options = request_options(additional_options)
-        request = ::Typhoeus::Request.new(url, options)
+        request = ::Typhoeus::Request.new(
+          url,
+          body: @body,
+          headers: options[:headers]
+        )
         logger.info "Requesting #{method.to_s.upcase} #{url}..."
         request.run
 
@@ -70,8 +77,13 @@ module OData4
         # Don't overwrite Accept header if already present
         unless options[:headers]['Accept']
           options[:headers] = options[:headers].merge({
-            'Accept' => content_type
+            'Accept' => content_type,
           })
+          unless options[:headers]['Content-Type']
+            options[:headers] = options[:headers].merge({
+              'Content-Type' => content_type,
+            })
+          end
         end
 
         options

@@ -20,6 +20,7 @@ module OData4
       # @param service [OData4::Service]
       # @param response [Typhoeus::Result]
       def initialize(service, response, query = nil)
+        byebug
         @service  = service
         @response = response
         @query    = query

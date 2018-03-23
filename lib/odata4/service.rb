@@ -7,6 +7,8 @@ module OData4
   class Service
     # The OData4 Service's URL
     attr_reader :service_url
+    #Faraday Connection Object
+    attr_reader :connection
     # Options to pass around
     attr_reader :options
 
@@ -18,7 +20,8 @@ module OData4
       atom:  'application/atom+xml',
       json:  'application/json',
       xml:   'application/xml',
-      plain: 'text/plain'
+      plain: 'text/plain',
+      jsonmin: 'application/json;odata.metadata=minimal'
     }
 
     # Opens the service based on the requested URL and adds the service to
@@ -30,6 +33,7 @@ module OData4
     def initialize(service_url, options = {})
       @service_url = service_url
       @options = default_options.merge(options)
+      @connection = faraday_connection
       OData4::ServiceRegistry.add(self)
       register_custom_types
     end
@@ -221,6 +225,14 @@ module OData4
         },
         strict: true # strict property validation
       }
+    end
+
+    def faraday_connection
+      @connection = Faraday.new(url: service_url) do |faraday|
+        faraday.request :url_encoded
+        faraday.response :logger
+        faraday.default_adapter Faraday.default_adapter
+      end
     end
 
     def read_metadata

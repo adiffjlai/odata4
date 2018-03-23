@@ -96,7 +96,7 @@ module OData4
         entity[entity.primary_key] = primary_key_node.content unless primary_key_node.nil?
       end
 
-      unless result.code.to_s =~ /^2[0-9][0-9]$/
+      unless result.response.code.to_s =~ /^2[0-9][0-9]$/
         entity.errors << ['could not commit entity']
       end
 
@@ -125,7 +125,7 @@ module OData4
 
     def execute_entity_post_request(options, url_chunk)
       result = service.execute(url_chunk, options)
-      unless result.code.to_s =~ /^2[0-9][0-9]$/
+      unless result.response.code.to_s =~ /^2[0-9][0-9]$/
         service.logger.debug <<-EOS
           [ODATA: #{service_name}]
           An error was encountered committing your entity:
@@ -145,15 +145,15 @@ module OData4
     end
 
     def setup_entity_post_request(entity)
+      ## TODO: Refine the way that new entities are matched.
       primary_key = entity.get_property(entity.primary_key).url_value
-      chunk = entity.is_new? ? name : "#{name}(#{primary_key})"
+      #chunk = entity.is_new? ? name : "#{name}(#{primary_key})"
+      chunk = name
+      byebug
       options = {
           method: :post,
-          body: entity.to_xml.gsub(/\n\s+/, ''),
-          headers: {
-              'Accept' => 'application/atom+xml',
-              'Content-Type' => 'application/atom+xml'
-          }
+          body: entity.to_json,
+          format: :jsonmin,
       }
       return chunk, options
     end

@@ -196,9 +196,15 @@ module OData4
     # Converts Entity to a hash.
     # @return [Hash]
     def to_hash
-      property_names.map do |name|
-        [name, get_property(name).json_value]
-      end.to_h
+      property_names.flat_map do |name|
+        prop = get_property(name)
+        value = prop.json_value
+        next [[nil, nil]] unless value
+          [
+            [name, value],
+            !prop.type.include?('Edm') ? ["#{name}@odata.type", "##{prop.type}"] : [nil,nil]
+          ]
+      end.to_h.compact.merge({"@odata.type" => "##{self.type}"})
     end
 
     # Returns the canonical URL for this entity
