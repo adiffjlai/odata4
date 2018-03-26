@@ -20,7 +20,6 @@ module OData4
       # @param service [OData4::Service]
       # @param response [Typhoeus::Result]
       def initialize(service, response, query = nil)
-        byebug
         @service  = service
         @response = response
         @query    = query
@@ -30,7 +29,7 @@ module OData4
 
       # Returns the HTTP status code.
       def status
-        response.code
+        response.status
       end
 
       # Whether the request was successful.
@@ -51,6 +50,10 @@ module OData4
         content_type =~ /#{Regexp.escape OData4::Service::MIME_TYPES[:json]}/
       end
 
+      def is_jsonmin?
+        content_type =~ /#{Redexp.escape OData4::Service::MIME_TYPES[:jsonmin]}/
+      end
+
       def is_plain?
         content_type =~ /#{Regexp.escape OData4::Service::MIME_TYPES[:plain]}/
       end
@@ -66,8 +69,9 @@ module OData4
       end
 
       # Whether the response failed due to a timeout
+      # replaced by ::HTTPClient::Error::TimeoutError =>
+      # Faraday::Error::TimeoutError
       def timed_out?
-        response.timed_out?
       end
 
       # Iterates over all entities in the response, using
@@ -96,15 +100,15 @@ module OData4
       #
       # @return [self]
       def validate!
-        raise "Bad Request. #{error_message(response)}" if response.code == 400
-        raise "Access Denied" if response.code == 401
-        raise "Forbidden" if response.code == 403
-        raise "Not Found" if [0,404].include?(response.code)
-        raise "Method Not Allowed" if response.code == 405
-        raise "Not Acceptable" if response.code == 406
-        raise "Request Entity Too Large" if response.code == 413
-        raise "Internal Server Error" if response.code == 500
-        raise "Service Unavailable" if response.code == 503
+        raise "Bad Request. #{error_message}" if response.status == 400
+        raise "Access Denied" if response.status == 401
+        raise "Forbidden" if response.status == 403
+        raise "Not Found" if [0,404].include?(response.status)
+        raise "Method Not Allowed" if response.status == 405
+        raise "Not Acceptable" if response.status == 406
+        raise "Request Entity Too Large" if response.status == 413
+        raise "Internal Server Error" if response.status == 500
+        raise "Service Unavailable" if response.status == 503
         self
       end
 

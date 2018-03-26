@@ -96,7 +96,7 @@ module OData4
         entity[entity.primary_key] = primary_key_node.content unless primary_key_node.nil?
       end
 
-      unless result.response.code.to_s =~ /^2[0-9][0-9]$/
+      unless result.response.status.to_s =~ /^2[0-9][0-9]$/
         entity.errors << ['could not commit entity']
       end
 
@@ -125,7 +125,7 @@ module OData4
 
     def execute_entity_post_request(options, url_chunk)
       result = service.execute(url_chunk, options)
-      unless result.response.code.to_s =~ /^2[0-9][0-9]$/
+      unless result.response.status.to_s =~ /^2[0-9][0-9]$/
         service.logger.debug <<-EOS
           [ODATA: #{service_name}]
           An error was encountered committing your entity:
@@ -149,7 +149,6 @@ module OData4
       primary_key = entity.get_property(entity.primary_key).url_value
       #chunk = entity.is_new? ? name : "#{name}(#{primary_key})"
       chunk = name
-      byebug
       options = {
           method: :post,
           body: entity.to_json,

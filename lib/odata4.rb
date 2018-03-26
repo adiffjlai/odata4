@@ -10,6 +10,9 @@ require 'json'
 # require 'active_support'
 # require 'active_support/core_ext'
 # require 'active_support/concern'
+require 'core_extensions'
+require 'core_extensions/hash'
+require 'core_extensions/hash/compacting'
 
 require 'odata4/version'
 require 'odata4/property_registry'
@@ -30,5 +33,4 @@ require 'odata4/railtie' if defined?(::Rails)
 # Ruby. Please look to the {file:README.md README} for how to get started using
 # the OData4 gem.
 module OData4
-  # Your code goes here...
 end

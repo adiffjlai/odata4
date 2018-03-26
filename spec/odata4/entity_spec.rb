@@ -146,6 +146,6 @@ describe OData4::Entity, vcr: {cassette_name: 'entity_specs'} do
         service_name: 'ODataDemo'
     } }
 
-    it { expect(subject.to_json).to eq(properties.to_json) }
+    it { expect(subject.to_json).to eq(properties.merge({"@odata.type" => "##{options[:type]}"}).to_json) }
   end
 end

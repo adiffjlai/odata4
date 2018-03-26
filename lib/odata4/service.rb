@@ -1,5 +1,6 @@
 require 'odata4/service/request'
 require 'odata4/service/response'
+require 'faraday'
 
 module OData4
   # Encapsulates the basic details and functionality needed to interact with an
@@ -228,10 +229,10 @@ module OData4
     end
 
     def faraday_connection
-      @connection = Faraday.new(url: service_url) do |faraday|
+      @connection = ::Faraday.new(url: service_url) do |faraday|
         faraday.request :url_encoded
         faraday.response :logger
-        faraday.default_adapter Faraday.default_adapter
+        faraday.adapter ::Faraday.default_adapter
       end
     end
 
@@ -242,11 +243,13 @@ module OData4
         ::Nokogiri::XML(data).remove_namespaces!
       else # From a URL
         response = nil
-        METADATA_TIMEOUTS.each do |timeout|
-          response = execute(metadata_url, timeout: timeout)
-          break unless response.timed_out?
+        begin
+          METADATA_TIMEOUTS.each do |timeout|
+            response = execute(metadata_url, timeout: timeout)
+          end
+        rescue HTTPClient::Error::TimeoutError
+          raise "Metadata Timeout"
         end
-        raise "Metadata Timeout" if response.timed_out?
         ::Nokogiri::XML(response.body).remove_namespaces!
       end
     end

@@ -30,7 +30,7 @@ describe OData4::Service::Response, vcr: {cassette_name: 'service/response_specs
     response = double('response')
     allow(response).to receive_messages(
       headers: { 'Content-Type' => content_type },
-      code: response_status,
+      status: response_status,
       body: response_body
     )
     response

@@ -31,4 +31,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'nokogiri', '~> 1.8'
   spec.add_dependency 'typhoeus', '~> 1.3'
   spec.add_dependency 'andand',   '~> 1.3'
+  spec.add_dependency 'faraday',  '~> 0.14'
 end

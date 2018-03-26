@@ -1,3 +1,30 @@
+module CoreExtensions
+  module Hash
+    module Compacting
+      def compact
+        self.select { |_, value| !value.nil? }
+      end
+
+      def compact!
+        self.reject! { |_, value| value.nil? }
+      end
+
+      def except(*keys)
+        self.dup.except!(*keys)
+      end
+
+      # Replaces the hash without the given keys.
+      #   hash = { a: true, b: false, c: nil}
+      #   hash.except!(:c) # => { a: true, b: false}
+      #   hash # => { a: true, b: false }
+      def except!(*keys)
+        self.keys.each { |key| delete(key) }
+        self
+      end
+    end
+  end
+end
+
 module OData4
   # An OData4::Entity represents a single record returned by the service. All
   # Entities have a type and belong to a specific namespace. They are written
@@ -5,6 +32,8 @@ module OData4
   # instances should not be instantiated directly; instead, they should either
   # be read or instantiated from their respective OData4::EntitySet.
   class Entity
+    Hash.include ::CoreExtensions::Hash::Compacting unless RUBY_VERSION > '2.4.0'
+
     # The Entity type name
     attr_reader :type
     # The OData4::Service's identifying name
@@ -194,17 +223,18 @@ module OData4
     end
 
     # Converts Entity to a hash.
+    # TODO: Move entity property type and entity type logic out of here!
+    # Perhaps, property.to_json method.
     # @return [Hash]
     def to_hash
       property_names.flat_map do |name|
         prop = get_property(name)
         value = prop.json_value
-        next [[nil, nil]] unless value
           [
             [name, value],
             !prop.type.include?('Edm') ? ["#{name}@odata.type", "##{prop.type}"] : [nil,nil]
           ]
-      end.to_h.compact.merge({"@odata.type" => "##{self.type}"})
+      end.to_h.merge({"@odata.type" => "##{self.type}"}).delete_if { |k| k.nil? }
     end
 
     # Returns the canonical URL for this entity

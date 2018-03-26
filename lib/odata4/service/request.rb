@@ -50,15 +50,18 @@ module OData4
       # @return [OData4::Service::Response]
       def execute(additional_options = {})
         options = request_options(additional_options)
-        request = ::Typhoeus::Request.new(
-          url,
-          body: @body,
-          headers: options[:headers]
-        )
-        logger.info "Requesting #{method.to_s.upcase} #{url}..."
-        request.run
 
-        Response.new(service, request.response, query)
+        logger.info "Requesting #{method.to_s.upcase} #{url} #{body}..."
+
+        response = service.connection.send(method) do |request|
+          request.url url
+          request.body = body
+          options[:headers].each do |key,value|
+            request.headers[key] = value
+          end
+        end
+
+        Response.new(service, response, query)
       end
 
       private
