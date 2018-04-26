@@ -123,26 +123,24 @@ For more examples, refer to [usage_example_specs.rb](spec/odata4/usage_example_s
 
 ### Authentication
 
-When authenticating with your service you can set parameters to the Typhoeus gem which uses libcurl.
-Use the **:typhoeus** option to set your authentication.
+When authenticating with your service you can set parameters to the Faraday gem.
+Use the **:faraday1** option to set your authentication.
 
 For example using **ntlm** authentication:
 
 ```ruby
   conn = OData4::Service.open('http://services.odata.org/V4/OData/OData.svc', {
     name: 'ODataDemo',
-    typhoeus: {
-      username: 'username',
-      password: 'password',
-      httpauth: :ntlm
+    faraday: {
+      login: 'username',
+      pass: 'password',
     }
   })
 ```
 
-For more authentication options see [libcurl][libcurl] or [typhoeus][typhoeus].
+For more authentication options see [Faraday](faraday)
 
-[libcurl]: http://curl.haxx.se/libcurl/c/CURLOPT_HTTPAUTH.html
-[typhoeus]: https://github.com/typhoeus/typhoeus
+[faraday]: https://github.com/lostisland/faraday/
 
 ### Metadata File
 
@@ -159,12 +157,12 @@ This is only recommended for testing purposes, as the metadata file can change.
 
 ### Headers
 
-You can set the headers with the **:typhoeus** param like so:
+You can set the headers with the **:faraday** param like so:
 
 ```ruby
   conn = OData4::Service.open('http://services.odata.org/V4/OData/OData.svc', {
     name: 'ODataDemo',
-    typhoeus: {
+    faraday: {
       headers: {
         "Authorization" => "Bearer #{token}"
       }

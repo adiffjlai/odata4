@@ -12,6 +12,8 @@ module OData4
       attr_accessor :body
       # The request format (`:atom`, `:json`, or `:auto`)
       attr_accessor :format
+      # crossCompany option for request
+      attr_accessor :cross_company
 
       # Create a new request
       # @param service [OData4::Service] Where the request will be sent
@@ -24,12 +26,16 @@ module OData4
         @format = options[:format]  || :auto
         @query  = options[:query]
         @body   = options[:body]    || nil
+        @cross_company = options[:cross_company] || false
+        puts options
       end
 
       # Return the full request URL (including service base)
       # @return [String]
       def url
-        ::URI.join("#{service.service_url}/", ::URI.escape(url_chunk)).to_s
+        append_query(
+          ::URI.join("#{service.service_url}/", ::URI.escape(url_chunk))
+        )
       end
 
       # The content type for this request. Depends on format.
@@ -46,7 +52,7 @@ module OData4
 
       # Execute the request
       #
-      # @param additional_options [Hash] options to pass to Typhoeus
+      # @param additional_options [Hash] options to pass to Faraday
       # @return [OData4::Service::Response]
       def execute(additional_options = {})
         options = request_options(additional_options)
@@ -73,7 +79,7 @@ module OData4
       end
 
       def request_options(additional_options = {})
-        options = service.options[:typhoeus]
+        options = service.options[:faraday]
           .merge({ method: method })
           .merge(additional_options)
 
@@ -90,6 +96,15 @@ module OData4
         end
 
         options
+      end
+
+      def append_query uri
+        new_query_arr = URI.decode_www_form(
+          String(uri.query)
+        ) << ["crossCompany", @cross_company]
+        puts new_query_arr
+        uri.query = URI.encode_www_form(new_query_arr)
+        uri.to_s
       end
     end
   end

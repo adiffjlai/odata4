@@ -18,7 +18,7 @@ module OData4
 
       # Create a new response given a service and a raw response.
       # @param service [OData4::Service]
-      # @param response [Typhoeus::Result]
+      # @param response [Faraday::Response]
       def initialize(service, response, query = nil)
         @service  = service
         @response = response

@@ -1,14 +1,18 @@
 require 'spec_helper'
 
 describe OData4::Service::Request, vcr: {cassette_name: 'service/request_specs'} do
-  let(:subject) { OData4::Service::Request.new(service, 'Products') }
+  let(:subject) { OData4::Service::Request.new(service, 'Products' ) }
   let(:service) { OData4::Service.open(service_url, name: 'ODataDemo', metadata_file: metadata_file) }
   let(:service_url) { 'http://services.odata.org/V4/OData/OData.svc' }
   let(:metadata_file) { 'spec/fixtures/files/metadata.xml' }
 
   describe '#url' do
     it 'returns the full request URL' do
-      expect(subject.url).to eq('http://services.odata.org/V4/OData/OData.svc/Products')
+      expect(subject.url).to eq('http://services.odata.org/V4/OData/OData.svc/Products?crossCompany=false')
+    end
+    it 'returns the full request URL with `crossCompany` param true if option true' do
+      subject.cross_company = true
+      expect(subject.url).to eq('http://services.odata.org/V4/OData/OData.svc/Products?crossCompany=true')
     end
   end
 

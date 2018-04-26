@@ -203,7 +203,7 @@ module OData4
         if defined?(Rails)
           Rails.logger
         else
-          logger = Logger.new(STDOUT)
+          logger = ::Logger.new(STDOUT)
           logger.level = log_level
           logger
         end
@@ -220,11 +220,17 @@ module OData4
 
     def default_options
       {
+        faraday: {
+          headers: { 'OData-Version' => '4.0' },
+          timeout: HTTP_TIMEOUT,
+        },
+        # This is deprecated
         typhoeus: {
           headers: { 'OData-Version' => '4.0' },
           timeout: HTTP_TIMEOUT
         },
-        strict: true # strict property validation
+        strict: true, # strict property validation
+        cross_company: false # return only data belonging to the default company
       }
     end
 
@@ -247,7 +253,7 @@ module OData4
           METADATA_TIMEOUTS.each do |timeout|
             response = execute(metadata_url, timeout: timeout)
           end
-        rescue HTTPClient::Error::TimeoutError
+        rescue Timeout::Error
           raise "Metadata Timeout"
         end
         ::Nokogiri::XML(response.body).remove_namespaces!
