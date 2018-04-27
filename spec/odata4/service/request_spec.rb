@@ -8,11 +8,11 @@ describe OData4::Service::Request, vcr: {cassette_name: 'service/request_specs'}
 
   describe '#url' do
     it 'returns the full request URL' do
-      expect(subject.url).to eq('http://services.odata.org/V4/OData/OData.svc/Products?crossCompany=false')
+      expect(subject.url).to eq('http://services.odata.org/V4/OData/OData.svc/Products?cross-company=false')
     end
     it 'returns the full request URL with `crossCompany` param true if option true' do
       subject.cross_company = true
-      expect(subject.url).to eq('http://services.odata.org/V4/OData/OData.svc/Products?crossCompany=true')
+      expect(subject.url).to eq('http://services.odata.org/V4/OData/OData.svc/Products?cross-company=true')
     end
   end
 

@@ -101,7 +101,7 @@ module OData4
       def append_query uri
         new_query_arr = URI.decode_www_form(
           String(uri.query)
-        ) << ["crossCompany", @cross_company]
+        ).unshift(["cross-company", @cross_company])
         puts new_query_arr
         uri.query = URI.encode_www_form(new_query_arr)
         uri.to_s

@@ -26,11 +26,12 @@ module OData4
     # @param options [Hash] the options to setup the EntitySet
     # @return [OData4::EntitySet] an instance of the EntitySet
     def initialize(options = {})
-      @name         = options[:name]
-      @type         = options[:type]
-      @namespace    = options[:namespace]
-      @service_name = options[:service_name]
-      @container    = options[:container]
+      @name           = options[:name]
+      @type           = options[:type]
+      @namespace      = options[:namespace]
+      @service_name   = options[:service_name]
+      @container      = options[:container]
+      @cross_company  = options[:crosse_company]
     end
 
     # Provided for Enumerable functionality

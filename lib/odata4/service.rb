@@ -146,7 +146,7 @@ module OData4
     # @param options [Hash] additional request options
     # @return [OData4::Service::Response]
     def execute(url_chunk, options = {})
-      Request.new(self, url_chunk, options).execute
+      Request.new(self, url_chunk, options.merge(@options[:request])).execute
     end
 
     # Get the property type for an entity from metadata.
@@ -230,7 +230,9 @@ module OData4
           timeout: HTTP_TIMEOUT
         },
         strict: true, # strict property validation
-        cross_company: false # return only data belonging to the default company
+        request: {
+          cross_company: false # return only data belonging to the default company
+        }
       }
     end
 

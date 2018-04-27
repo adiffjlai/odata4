@@ -165,7 +165,6 @@ You can set the headers with the **:faraday** param like so:
     faraday: {
       headers: {
         "Authorization" => "Bearer #{token}"
-      }
     }
   })
 ```
