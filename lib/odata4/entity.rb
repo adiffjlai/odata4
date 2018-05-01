@@ -253,8 +253,16 @@ module OData4
       schema.primary_key_for(name)
     end
 
+    def compound_keys
+      schema.compound_keys_for(name)
+    end
+
     def is_new?
-      self[primary_key].nil?
+      compound_keys.each do |key|
+        return false if self[key]
+        return false if self.get_property(key).allows_nil?
+      end
+      true
     end
 
     def any_errors?
@@ -310,6 +318,10 @@ module OData4
     # Instantiating properties takes time, so we can lazy load properties by passing xml_value and lookup when needed
     def set_property_lazy_load(name, xml_value )
       properties_xml_value[name.to_s] = xml_value
+    end
+
+    def compound_key_required? key
+      schema[name]
     end
 
     def self.process_properties(entity, xml_doc)

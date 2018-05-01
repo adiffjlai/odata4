@@ -5,6 +5,7 @@
       <EntityType Name="Product">
         <Key>
           <PropertyRef Name="ID" />
+          <PropertyRef Name="Name" />
         </Key>
         <Property Name="ID" Type="Edm.Int32" Nullable="false" />
         <Property Name="Name" Type="Edm.String" />

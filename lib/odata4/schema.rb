@@ -111,6 +111,14 @@ module OData4
       metadata.xpath("//EntityType[@Name='#{entity_name}']/Key/PropertyRef").first.attributes['Name'].value
     end
 
+    # Get the compound keys for the supplied Entity.
+    #
+    # @param entity_name [to_s]
+    # @return [Array]
+    def compound_keys_for(entity_name)
+      metadata.xpath("//EntityType[@Name='#{entity_name}']/Key/PropertyRef").map { |prop| prop.attributes['Name'].value }
+    end
+
     # Get the list of properties and their various options for the supplied
     # Entity name.
     # @param entity_name [to_s]

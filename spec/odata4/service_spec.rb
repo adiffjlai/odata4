@@ -113,6 +113,11 @@ describe OData4::Service, vcr: {cassette_name: 'service_specs'} do
     it { expect(subject.primary_key_for('ODataDemo.Product')).to eq('ID') }
   end
 
+  describe '#compound_keys_for' do
+    it { expect(subject).to respond_to(:compound_keys_for) }
+    it { expect(subject.compound_keys_for('ODataDemo.Product')).to eq(['ID', 'Name']) }
+  end
+
   describe '#properties_for_entity' do
     it { expect(subject).to respond_to(:properties_for_entity) }
     it { expect(subject.properties_for_entity('ODataDemo.Product').keys).to eq(%w[

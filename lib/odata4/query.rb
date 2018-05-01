@@ -41,6 +41,24 @@ module OData4
       execute(query).first
     end
 
+    def find_by(**params)
+      entity = @entity_set.new_entity
+      return nil if params.keys.eql entity.compound_keys
+      key_properties = params.keys.map do |key|
+        property = entity.get_property(key)
+        property.value = params[key]
+        property
+      end
+
+      pathname = "#{entity_set.name}(#{url_for_properties(key_properties)})"
+      query = [pathname, assemble_criteria].compact.join('?')
+      execute(query).first
+    end
+
+    def url_for_properties(key_properties)
+      key_properties.map { |key_prop| key_prop.url_value }.join(',')
+    end
+
     # Adds a filter criteria to the query.
     # For filter syntax see https://msdn.microsoft.com/en-us/library/gg309461.aspx
     # Syntax:

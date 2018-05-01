@@ -170,6 +170,16 @@ module OData4
       schemas[namespace].primary_key_for(entity_name)
     end
 
+    # Get the compound keys for the supplied Entity.
+    #
+    # @param entity_name [to_s] the fully qualified entity name
+    # @return [Array]
+    def compound_keys_for(entity_name)
+      namespace, _, entity_name = entity_name.rpartition('.')
+      raise ArgumentError, 'Namespace missing' if namespace.nil? || namespace.empty?
+      schemas[namespace].compound_keys_for(entity_name)
+    end
+
     # Get the list of properties and their various options for the supplied
     # Entity name.
     # @param entity_name [to_s]

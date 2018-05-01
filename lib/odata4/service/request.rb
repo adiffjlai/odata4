@@ -27,7 +27,6 @@ module OData4
         @query  = options[:query]
         @body   = options[:body]    || nil
         @cross_company = options[:cross_company] || false
-        puts options
       end
 
       # Return the full request URL (including service base)
@@ -102,7 +101,6 @@ module OData4
         new_query_arr = URI.decode_www_form(
           String(uri.query)
         ).unshift(["cross-company", @cross_company])
-        puts new_query_arr
         uri.query = URI.encode_www_form(new_query_arr)
         uri.to_s
       end

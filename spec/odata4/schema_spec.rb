@@ -80,6 +80,11 @@ describe OData4::Schema do
     it { expect(subject.primary_key_for('Product')).to eq('ID') }
   end
 
+  describe '#compound_keys_for' do
+    it { expect(subject).to respond_to(:compound_keys_for) }
+    it { expect(subject.compound_keys_for('Product')).to eq(['ID', 'Name']) }
+  end
+
   describe '#properties_for_entity' do
     it { expect(subject).to respond_to(:properties_for_entity) }
     it { expect(subject.properties_for_entity('Product').keys).to eq(%w[
