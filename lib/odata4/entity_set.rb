@@ -74,14 +74,22 @@ module OData4
     # Find the Entity with the supplied key value.
     # @param key [to_s] primary key to lookup
     # @return [OData4::Entity,nil]
-    def [](key, options={})
+    def [](keys, options={})
       properties_to_expand = if options[:expand] == :all
         new_entity.navigation_property_names
       else
         [ options[:expand] ].compact.flatten
       end
-
       query.expand(*properties_to_expand).find(key)
+    end
+
+    def find_by(**params)
+      properties_to_expand = if options[:expand] == :all
+        new_entity.navigation_property_names
+      else
+        [ options[:expand] ].compact.flatten
+      end
+      query.expand(*properties_to_expand).find_by(params)
     end
 
     # Write supplied entity back to the service.

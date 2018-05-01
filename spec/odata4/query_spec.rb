@@ -41,6 +41,16 @@ describe OData4::Query, vcr: {cassette_name: 'query_specs'} do
     end
   end
 
+  it { expect(subject).to respond_to(:find_by) }
+  describe '#find_by' do
+    let (:product) { subject.find_by(ID: 0) }
+
+    it 'finds an entity by composite keys' do
+      expect(product).to be_a(OData4::Entity)
+      expect(product['ID']).to eq(0)
+    end
+  end
+
   it { expect(subject).to respond_to(:where) }
   describe '#where' do
     let(:criteria) { subject[:Name].eq('Bread') }

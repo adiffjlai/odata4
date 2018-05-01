@@ -43,7 +43,7 @@ module OData4
 
     def find_by(**params)
       entity = @entity_set.new_entity
-      return nil if params.keys.eql entity.compound_keys
+      return nil if params.keys.eql? entity.compound_keys
       key_properties = params.keys.map do |key|
         property = entity.get_property(key)
         property.value = params[key]
@@ -56,7 +56,7 @@ module OData4
     end
 
     def url_for_properties(key_properties)
-      key_properties.map { |key_prop| key_prop.url_value }.join(',')
+      key_properties.map { |key_prop| ["#{key_prop.name}=#{key_prop.url_value}"] }.join(',')
     end
 
     # Adds a filter criteria to the query.

@@ -2490,4 +2490,60 @@ http_interactions:
       string: '{"@odata.context":"http://services.odata.org/V4/OData/OData.svc/$metadata#Products","value":[]}'
     http_version: 
   recorded_at: Fri, 27 Apr 2018 17:06:17 GMT
+- request:
+    method: get
+    uri: http://services.odata.org/V4/OData/OData.svc/Products(ID=0)?cross-company=false
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.14.0
+      OData-Version:
+      - '4.0'
+      Accept:
+      - application/atom+xml,application/json,application/xml,text/plain,application/json;odata.metadata=minimal
+      Content-Type:
+      - application/atom+xml,application/json,application/xml,text/plain,application/json;odata.metadata=minimal
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      cache-control:
+      - no-cache
+      content-length:
+      - '302'
+      content-type:
+      - application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false;charset=utf-8
+      vary:
+      - Accept-Encoding
+      server:
+      - Microsoft-IIS/10.0
+      x-content-type-options:
+      - nosniff
+      odata-version:
+      - 4.0;
+      x-aspnet-version:
+      - 4.0.30319
+      x-powered-by:
+      - ASP.NET
+      access-control-allow-origin:
+      - "*"
+      access-control-allow-methods:
+      - GET
+      access-control-allow-headers:
+      - Accept, Origin, Content-Type, MaxDataServiceVersion
+      access-control-expose-headers:
+      - DataServiceVersion
+      date:
+      - Tue, 01 May 2018 20:20:07 GMT
+      connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: '{"@odata.context":"http://services.odata.org/V4/OData/OData.svc/$metadata#Products/$entity","ID":0,"Name":"Bread","Description":"Whole
+        grain bread","ReleaseDate":"1992-01-01T00:00:00Z","DiscontinuedDate":null,"Rating":4,"Price":2.5}'
+    http_version: 
+  recorded_at: Tue, 01 May 2018 20:20:06 GMT
 recorded_with: VCR 4.0.0
