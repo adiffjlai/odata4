@@ -2319,4 +2319,46 @@ http_interactions:
       string: '11'
     http_version: 
   recorded_at: Fri, 27 Apr 2018 17:05:57 GMT
+- request:
+    method: get
+    uri: http://services.odata.org/V4/TripPinServiceRW/$metadata?cross-company=false
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.14.0
+      OData-Version:
+      - '4.0'
+      Accept:
+      - application/atom+xml,application/json,application/xml,text/plain,application/json;odata.metadata=minimal
+      Content-Type:
+      - application/atom+xml,application/json,application/xml,text/plain,application/json;odata.metadata=minimal
+  response:
+    status:
+      code: 302
+      message: Found
+    headers:
+      content-length:
+      - '197'
+      content-type:
+      - text/html; charset=utf-8
+      location:
+      - "/V4/(S(aqgckgwc2gnb1e4zwbv2vhxx))/TripPinServiceRW/$metadata?cross-company=false"
+      server:
+      - Microsoft-IIS/10.0
+      access-control-allow-origin:
+      - "*"
+      x-powered-by:
+      - ASP.NET
+      date:
+      - Tue, 01 May 2018 20:32:14 GMT
+      connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: "<html><head><title>Object moved</title></head><body>\r\n<h2>Object
+        moved to <a href=\"/V4/(S(aqgckgwc2gnb1e4zwbv2vhxx))/TripPinServiceRW/$metadata?cross-company=false\">here</a>.</h2>\r\n</body></html>\r\n"
+    http_version: 
+  recorded_at: Tue, 01 May 2018 20:32:14 GMT
 recorded_with: VCR 4.0.0

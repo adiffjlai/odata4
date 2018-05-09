@@ -41,9 +41,9 @@ describe OData4::Query, vcr: {cassette_name: 'query_specs'} do
     end
   end
 
-  it { expect(subject).to respond_to(:find_by) }
-  describe '#find_by' do
-    let (:product) { subject.find_by(ID: 0) }
+  it { expect(subject).to respond_to(:find_by_compound_keys) }
+  describe '#find_by_compound_keys' do
+    let (:product) { subject.find_by_compound_keys(ID: 0) }
 
     it 'finds an entity by composite keys' do
       expect(product).to be_a(OData4::Entity)

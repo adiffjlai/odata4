@@ -31,7 +31,8 @@ module OData4
     # Find the Entity with the supplied key value.
     # @param key [to_s] primary key to lookup
     # @return [OData4::Entity,nil]
-    def find(key)
+    def find(key=nil, **compound_keys)
+      return find_by_compound_keys(**compound_keys) unless key
       entity = @entity_set.new_entity
       key_property = entity.get_property(entity.primary_key)
       key_property.value = key
@@ -41,7 +42,7 @@ module OData4
       execute(query).first
     end
 
-    def find_by(**params)
+    def find_by_compound_keys(**params)
       entity = @entity_set.new_entity
       return nil if params.keys.eql? entity.compound_keys
       key_properties = params.keys.map do |key|

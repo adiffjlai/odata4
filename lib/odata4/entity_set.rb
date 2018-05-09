@@ -74,13 +74,13 @@ module OData4
     # Find the Entity with the supplied key value.
     # @param key [to_s] primary key to lookup
     # @return [OData4::Entity,nil]
-    def [](keys, options={})
+    def [](key_pairs, options={})
       properties_to_expand = if options[:expand] == :all
         new_entity.navigation_property_names
       else
         [ options[:expand] ].compact.flatten
       end
-      query.expand(*properties_to_expand).find(key)
+      query.expand(*properties_to_expand).find(key_pairs)
     end
 
     def find_by(**params)
