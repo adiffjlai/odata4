@@ -31,7 +31,6 @@ module OData4
       @namespace      = options[:namespace]
       @service_name   = options[:service_name]
       @container      = options[:container]
-      @cross_company  = options[:cross_company]
     end
 
     # Provided for Enumerable functionality

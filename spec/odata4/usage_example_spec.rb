@@ -173,4 +173,15 @@ describe 'Usage examples', vcr: { cassette_name: 'usage_example_specs' } do
       expect(product["Price"]).to eq(3.5)
     end
   end
+
+  describe 'working with entities accross company' do
+    let(:request_options) { { cross_company: true } }
+    let(:metadata_file) { 'spec/fixtures/files/metadata.xml' }
+    let(:cross_company_service) { OData4::Service.open(service_url, metadata_file: metadata_file,  name: 'ODataDemo', request: request_options) }
+    let(:cross_company_product) { cross_company_service['Products'][1] }
+
+    it 'requests for cross company entities' do
+      expect(cross_company_service.options[:request]).to eq(request_options)
+    end
+  end
 end
