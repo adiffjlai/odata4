@@ -15,7 +15,7 @@ module OData4
         end
 
         def error_message
-          result_json['error'].andand['message']
+          result_json['error'].andand['innererror']
         end
 
         def parsed_body

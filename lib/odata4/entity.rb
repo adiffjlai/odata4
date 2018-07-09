@@ -218,8 +218,9 @@ module OData4
     # Converts Entity to its JSON representation.
     # @return [String]
     def to_json
-      # TODO: add @odata.context
-      to_hash.to_json
+      property_hash = to_hash
+      property_hash.merge!({"@odata.context" => context})
+      property_hash.delete_if{|k,v| v.nil?}.to_json
     end
 
     # Converts Entity to a hash.
@@ -231,8 +232,7 @@ module OData4
         prop = get_property(name)
         value = prop.json_value
           [
-            [name, value],
-            !prop.type.include?('Edm') ? ["#{name}@odata.type", "##{prop.type}"] : [nil,nil]
+            [name, value]
           ]
       end.to_h.merge({"@odata.type" => "##{self.type}"}).delete_if { |k| k.nil? }
     end
