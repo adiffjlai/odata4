@@ -240,9 +240,7 @@ module OData4
           timeout: HTTP_TIMEOUT
         },
         strict: true, # strict property validation
-        request: {
-          cross_company: false # return only data belonging to the default company
-        }
+        request: {}
       }
     end
 
